@@ -1,0 +1,20 @@
+{
+  "name": "geometry-engine-backend",
+  "version": "0.1.0",
+  "description": "sample sls google cloud app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "danilaplee",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-google-cloudfunctions": "*",
+    "serverless-offline": "^10.0.2",
+    "serverless-plugin-typescript": "^2.1.2",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "geometric": "^2.5.0"
+  }
+}
