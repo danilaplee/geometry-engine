@@ -7,11 +7,11 @@ const GEMenu = styled.div`
 	height:60px;
 	left:0;
 	top:0;
-    background-color: rgb(121, 69, 145);
-    color: rgb(255, 255, 255);
-    padding:0 20px;
-    justify-content: space-between;
-    flex-wrap: wrap-reverse;
+  background-color: rgb(121, 69, 145);
+  color: rgb(255, 255, 255);
+  padding:0 20px;
+  justify-content: space-between;
+  flex-wrap: wrap-reverse;
 `
 
 export default GEMenu

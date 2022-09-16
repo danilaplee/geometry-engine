@@ -68,39 +68,45 @@ function GEUploadForm() {
 
   return (
     <div>
-        <GEMenu>
-          <Link to="/">
-              <GETitle color="white">EXIT</GETitle>
-          </Link>
-          <Link to="/viewer">
-              <GETitle color="white"> VIEW RESULTS </GETitle>
-          </Link>
-        </GEMenu>
+      <GEMenu>
+        <Link to="/">
+          <GETitle color="white">
+          EXIT
+          </GETitle>
+        </Link>
+        <Link to="/viewer">
+          <GETitle color="white">
+          VIEW RESULTS
+          </GETitle>
+        </Link>
+      </GEMenu>
+      
+      <GEInnerContainer>
+        <GETitle text-align="left">
+          UPLOAD FORM
+        </GETitle>
+
+        <GEFormSection>
+          <GEInput 
+            ref={fileInputRef}
+            type="file" 
+            accept="application/json" />
+        </GEFormSection>
         
-        <GEInnerContainer>
-          <GETitle text-align="left">UPLOAD FORM</GETitle>
-
-          <GEFormSection>
-            <GEInput 
-              ref={fileInputRef}
-              type="file" 
-              accept="application/json" />
-          </GEFormSection>
-          
-          <GEFormSection>          
-            {isLoading === false ? (
-              <GEButton
-              ref={submitRef}
+        <GEFormSection>          
+          {isLoading === false ? (
+            <GEButton
+            ref={submitRef}
+            onClick={onSubmit}
+            > SUBMIT </GEButton>
+          ) : (
+            <GEButton
               onClick={onSubmit}
-              > SUBMIT </GEButton>
-            ) : (
-              <GEButton
-                onClick={onSubmit}
-              > LOADING... </GEButton>
-            )}
-          </GEFormSection>
+            > LOADING... </GEButton>
+          )}
+        </GEFormSection>
 
-        </GEInnerContainer>
+      </GEInnerContainer>
 
 
     </div>

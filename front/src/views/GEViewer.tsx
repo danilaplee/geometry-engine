@@ -49,7 +49,9 @@ function GEViewer() {
 
   			</GEMenu>
   			<GEInnerContainer>
-				<GETitle text-align="left">VIEWING RESULTS</GETitle>
+				<GETitle text-align="left">
+					VIEWING RESULTS
+				</GETitle>
 		        <DataTable
 		            columns={columns}
 		            data={data as any[]}
