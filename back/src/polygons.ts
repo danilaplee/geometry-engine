@@ -1,6 +1,7 @@
 'use strict';
 const geometric = require("geometric");
 
+
 export interface PolygonItem {
   author:string;
   category:string;
@@ -14,12 +15,7 @@ export interface PolygonItem {
   }
 }
 
-exports.first = (request, res, callback) => {
-  console.info("request",request)
-  callback("hello world")
-};
-
-const processPolygonBatch = async (polygons:PolygonItem[]) => {
+export const processPolygonBatch = async (polygons:PolygonItem[]) => {
   
   const processed = polygons.map(poly=>{
     const p = poly.polygon.points
@@ -50,20 +46,4 @@ const processPolygonBatch = async (polygons:PolygonItem[]) => {
   return {
     sortedCategorySet
   }
-}
-
-exports.processPolygonPayload = async (req, res, callback) => {
-  try {
-    const data = JSON.parse(req.body);
-    if(data.payload) {
-      const { polygons } = data.payload
-      const result = await processPolygonBatch(polygons)
-      console.info(result)
-      callback(result)
-    }
-  } catch(err) {
-    console.error("err", err)
-  }
-
-  callback({ success: true })  
 }

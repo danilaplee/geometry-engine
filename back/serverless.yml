@@ -3,13 +3,9 @@ service: geometry-lab
 provider:
   name: google
   stage: dev
-  runtime: "nodejs16.x"
-  region: eu
+  runtime: nodejs16
+  region: europe-west2
   project: geometry-lab
-  # The GCF credentials can be a little tricky to set up. Luckily we've documented this for you here:
-  # https://serverless.com/framework/docs/providers/google/guide/credentials/
-  #
-  # the path to the credentials file needs to be absolute
   credentials: ~/.gcloud/keyfile.json
 
 frameworkVersion: '3'
@@ -29,19 +25,9 @@ package:
     - .git/**
 
 functions:
-  first:
-    handler: index.first
-    events:
-      - http: 
-          path: /
-          method: get
-          cors: true # <-- CORS!
-
-
   processPolygonPayload:
-    handler: index.processPolygonPayload
+    handler: "processPolygonPayload"
     events:
-      - http: 
-          path: /processPolygonPayload
-          method: post
-          cors: true # <-- CORS!
+      - http: path
+          # method: post
+          # cors: true 
