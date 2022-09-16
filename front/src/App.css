@@ -36,6 +36,9 @@
     transform: rotate(360deg);
   }
 }
+.rdt_TableHeadRow {
+  font-weight: 600;
+}
 /* Note: This CSS will style all instances of 
    <input type=file /> controls in your website. */
 input[type="file"],

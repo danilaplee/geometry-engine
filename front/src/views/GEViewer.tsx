@@ -34,28 +34,26 @@ function GEViewer() {
   	return (
   		<div>
   			<GEMenu>
-  				
-				<Link to="/">
+					<Link to="/">
 	  				<GETitle 
 	  					color="white" 
 	  				>EXIT</GETitle>
-				</Link>
+					</Link>
 
-				<Link to="/upload">
+					<Link to="/upload">
 	  				<GETitle 
 	  					color="white" 
 	  				> UPLOAD FILE </GETitle>
-				</Link>
-
+					</Link>
   			</GEMenu>
   			<GEInnerContainer>
-				<GETitle text-align="left">
-					VIEWING RESULTS
-				</GETitle>
-		        <DataTable
-		            columns={columns}
-		            data={data as any[]}
-		        />
+					<GETitle text-align="left">
+						VIEWING RESULTS
+					</GETitle>
+	        <DataTable
+	            columns={columns}
+	            data={data as any[]}
+	        />
   			</GEInnerContainer>
   		</div>
   	);
