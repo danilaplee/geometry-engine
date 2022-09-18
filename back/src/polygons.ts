@@ -1,19 +1,7 @@
 'use strict';
 const geometric = require("geometric");
 
-
-export interface PolygonItem {
-  author:string;
-  category:string;
-  area?:number;
-  totalPoints?:number;
-  polygon:{
-    points:{
-      x:number;
-      y:number;
-    }[]
-  }
-}
+import { PolygonItem } from './types'
 
 export const processPolygonBatch = async (polygons:PolygonItem[]) => {
   

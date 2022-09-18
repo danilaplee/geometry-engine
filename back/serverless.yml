@@ -29,5 +29,9 @@ functions:
     handler: "processPolygonPayload"
     events:
       - http: path
-          # method: post
-          # cors: true 
+  processPolygonBatch:
+    handler: processPolygonBatch
+    events:
+      - event:
+          eventType: providers/cloud.pubsub/eventTypes/topic.publish
+          resource: 'projects/${self:provider.project, ""}/topics/polygon-batch'
