@@ -41,20 +41,22 @@ exports.processPolygonPayloadSQS = async (req, res) => {
     if(data.payload) {
       const { polygons } = data.payload
       const pubSubClient = new PubSub();
-        const dataBuffer = Buffer.from(data);
-        const topicNameOrId = "polygon-batch"
-        try {
-          const messageId = await pubSubClient
-            .topic(topicNameOrId)
-            .publishMessage({data: dataBuffer});
-          console.log(`Message ${messageId} published.`);
-        } catch (error) {
-          console.error(`Received error while publishing: ${error.message}`);
-          return res.send({
-            success:false, 
-            error:err.message 
-          })
-        }
+      const dataBuffer = Buffer.from(JSON.stringify(data));
+      const topicNameOrId = "polygon-batch"
+      try {
+        const messageId = await pubSubClient
+          .topic(topicNameOrId)
+          .publishMessage({data: dataBuffer});
+        console.log(`Message ${messageId} published.`);
+      } catch (error) {
+        console.error(
+          `Received error while publishing: ${error.message}`
+        );
+        return res.send({
+          success:false, 
+          error:error.message 
+        })
+      }
 
     }
   } catch(err) {
@@ -68,7 +70,20 @@ exports.processPolygonPayloadSQS = async (req, res) => {
   return res.send({ success: true })  
 }
 
-exports.processPolygonBatch = async (event, callback) => {
+exports.processPolygonBatch = async (event, ctx, callback) => {
   console.info("processPolygonBatch", event)
-  callback()
+  try {
+    const data = JSON.parse(
+      Buffer
+      .from(event.data, 'base64')
+      .toString()
+    )
+    const { polygons } = data.payload
+    const result = processPolygonBatch(polygons)
+    callback(null, result)
+
+  } catch(err) {
+    console.error(`process batch error: ${err.message}`)
+    throw err.message
+  }
 }

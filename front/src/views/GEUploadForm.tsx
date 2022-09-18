@@ -12,7 +12,7 @@ import GEInnerContainer from '../components/GEInnerContainer'
 import GEFormSection from '../components/GEFormSection'
 
 const FileUploadURL = process.env.FILE_UPLOAD_URL 
-|| "https://europe-west2-geometry-lab.cloudfunctions.net/geometry-lab-dev-processPolygonPayload"
+|| "https://europe-west2-geometry-lab.cloudfunctions.net/geometry-lab-dev-processPolygonPayloadSQS"
 
 const annotationsLink = "https://raw.githubusercontent.com/danilaplee/geometry-engine/main/annotations.json"
 
@@ -62,6 +62,10 @@ function GEUploadForm() {
     .then(async (data)=>{
       const j = await data.json()
       console.info('==== file uploaded ====', j)
+      if(j.success !== true) {
+        showError(j.error)
+        return;
+      }
       window.localStorage.setItem("jData", JSON.stringify(j))
       navigate("/viewer")
     })
