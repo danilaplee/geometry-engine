@@ -1,12 +1,9 @@
 import React from 'react';
 import {
 	useRef, 
-	useState, 
-	useEffect, 
-  // useReducer
+	useState
 } from 'react'
-import styled from 'styled-components'
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GETitle from '../components/GETitle'
 import GEMenu from '../components/GEMenu'
 import GEInput from '../components/GEInput'
@@ -18,19 +15,26 @@ const FileUploadURL = process.env.FILE_UPLOAD_URL
 || "https://europe-west2-geometry-lab.cloudfunctions.net/geometry-lab-dev-processPolygonPayload"
 
 const annotationsLink = "https://raw.githubusercontent.com/danilaplee/geometry-engine/main/annotations.json"
+
+const Errors = {
+  nofile:"NO FILE SELECTED"
+}
 function GEUploadForm() {
   const navigate = useNavigate()
-  const GETextArea = styled.textarea`
-    padding:8px;
-    width:100%
-  `
   const [isLoading, setIsLoading] = useState(false) 
+
+  const [errorText, setError] = useState("")
+
+  const errorTime = 3000
+
+  const showError = (message:string) => {
+    setError(message)
+    setTimeout(()=>setError(""), errorTime)
+  }
   
   const fileInputRef = useRef(null)
 
   const submitRef = useRef(null)
-
-  const textAreaRef = useRef(null)
 
   const onSubmit = () => {
     if(isLoading) {
@@ -39,12 +43,11 @@ function GEUploadForm() {
     }
     
     const input = fileInputRef.current as any
-  
-    let validTextareaJSON = false
 
     if(
       input.files.length === 0 
       ) {
+      showError(Errors.nofile)
       return null
     }
 
@@ -61,6 +64,9 @@ function GEUploadForm() {
       console.info('==== file uploaded ====', j)
       window.localStorage.setItem("jData", JSON.stringify(j))
       navigate("/viewer")
+    })
+    .catch((err)=>{
+      showError(err.message)
     })
 
     return null
@@ -82,10 +88,17 @@ function GEUploadForm() {
             href={annotationsLink} 
             download
             target="_blank"
+            rel="noreferrer"
             >
               annotations.json
           </a>)
         </GETitle>
+
+        {errorText !== "" ? (
+          <GETitle color="red">
+          ERROR: {errorText}
+          </GETitle>) 
+        : ""}
 
         <GEFormSection>
           <GEInput 

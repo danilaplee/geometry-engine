@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-	useRef, 
-	useState, 
-	useEffect, 
-  // useReducer
-} from 'react'
-import styled from 'styled-components'
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import GETitle from '../components/GETitle'
 import GEMenu from '../components/GEMenu'
 import GEInnerContainer from '../components/GEInnerContainer'

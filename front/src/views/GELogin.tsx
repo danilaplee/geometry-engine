@@ -1,13 +1,8 @@
 import React from 'react';
-import {
-	useRef, 
-	useState, 
-	useEffect, 
-  // useReducer
-} from 'react'
+
 import styled from 'styled-components'
 
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import GEButton from '../components/GEButton'
 
@@ -16,6 +11,8 @@ import GETitle from '../components/GETitle'
 import GEInput from '../components/GEInput'
 
 import GEFormSection from '../components/GEFormSection'
+
+import logo from '../logo.svg';
 
 function GELogin() {
 
