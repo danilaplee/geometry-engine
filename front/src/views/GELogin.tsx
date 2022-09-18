@@ -27,22 +27,9 @@ import GEInput from '../components/GEInput'
 import GEFormSection from '../components/GEFormSection'
 
 import logo from '../logo.svg';
-const actionCodeSettings = {
-  // URL you want to redirect back to. The domain (www.example.com) for this
-  // URL must be in the authorized domains list in the Firebase Console.
-  url: 'https://geometry-lab.ew.r.appspot.com/finishSignUp',
-  // This must be true.
-  handleCodeInApp: true,
-  iOS: {
-    bundleId: 'geometry-lab.danilaplee.ios'
-  },
-  android: {
-    packageName: 'geometry-lab.danilaplee.android',
-    installApp: true,
-    minimumVersion: '12'
-  },
-  dynamicLinkDomain: 'geometry-lab.ew.r.appspot.com'
-};
+
+import { actionCodeSettings } from '../config'
+
 function GELogin() {
   const navigate = useNavigate()
 

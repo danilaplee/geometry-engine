@@ -11,14 +11,9 @@ import GEButton from '../components/GEButton'
 import GEInnerContainer from '../components/GEInnerContainer'
 import GEFormSection from '../components/GEFormSection'
 
-const FileUploadURL = process.env.FILE_UPLOAD_URL 
-|| "https://europe-west2-geometry-lab.cloudfunctions.net/geometry-lab-dev-processPolygonPayloadSQS"
 
-const annotationsLink = "https://raw.githubusercontent.com/danilaplee/geometry-engine/main/annotations.json"
+import { FileUploadURL, annotationsLink, Errors } from '../config'
 
-const Errors = {
-  nofile:"NO FILE SELECTED"
-}
 function GEUploadForm() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false) 
