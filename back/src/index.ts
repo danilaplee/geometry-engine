@@ -1,6 +1,6 @@
 import { setCors } from './utils'
 import { processPolygonBatch } from './polygons'
-
+import { v4 as uuid } from 'uuid'
 const { PubSub } = require('@google-cloud/pubsub');
 
 exports.processPolygonPayload = async (req, res) => {
@@ -41,13 +41,22 @@ exports.processPolygonPayloadSQS = async (req, res) => {
     if(data.payload) {
       const { polygons } = data.payload
       const pubSubClient = new PubSub();
-      const dataBuffer = Buffer.from(JSON.stringify(data));
+      const id = uuid()
+      const dataBuffer = Buffer.from(JSON.stringify({...data, id}));
       const topicNameOrId = "polygon-batch"
       try {
+        
         const messageId = await pubSubClient
           .topic(topicNameOrId)
           .publishMessage({data: dataBuffer});
+        
         console.log(`Message ${messageId} published.`);
+
+        return res.send({
+          success:true,
+          jobId:id
+        })
+
       } catch (error) {
         console.error(
           `Received error while publishing: ${error.message}`
@@ -78,8 +87,14 @@ exports.processPolygonBatch = async (event, ctx, callback) => {
       .from(event.data, 'base64')
       .toString()
     )
-    const { polygons } = data.payload
+    const { payload, id } = data
+    const { polygons } = data
     const result = processPolygonBatch(polygons)
+
+    console.info('processPolygonBatch result', result)
+
+    
+
     callback(null, result)
 
   } catch(err) {
