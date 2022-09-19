@@ -1,6 +1,16 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("../serviceAccountKey.json");
+// const serviceAccount = require("../serviceAccountKey.json");
 import { firebaseConfig } from './config'
+
+admin.initializeApp({
+  ...firebaseConfig,
+  // credential: admin.credential.cert(serviceAccount),
+  databaseAuthVariableOverride: {
+    uid: "polygon-sqs-processor"
+  }
+});
+
+const db = admin.database();
 
 export const setCors = (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
@@ -18,14 +28,5 @@ export const setCors = (req, res) => {
 }
 
 export const getDB = () => {
-  admin.initializeApp({
-    ...firebaseConfig,
-    credential: admin.credential.cert(serviceAccount),
-    databaseAuthVariableOverride: {
-      uid: "sqs-processor"
-    }
-  });
-
-  const db = admin.database();
   return db;
 }
