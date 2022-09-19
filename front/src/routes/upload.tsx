@@ -3,6 +3,8 @@ import {
 	useRef, 
 	useState
 } from 'react'
+
+import { getDatabase, ref, onValue} from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
 import GETitle from '../components/GETitle'
 import GEMenu from '../components/GEMenu'
@@ -11,20 +13,23 @@ import GEButton from '../components/GEButton'
 import GEInnerContainer from '../components/GEInnerContainer'
 import GEFormSection from '../components/GEFormSection'
 
-
-import { FileUploadURL, annotationsLink, Errors } from '../config'
+import { 
+  FileUploadURL, 
+  annotationsLink, 
+  Errors, 
+  ErrorDisplayTime 
+} from '../config'
 
 function GEUploadForm() {
+
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false) 
 
   const [errorText, setError] = useState("")
 
-  const errorTime = 3000
-
   const showError = (message:string) => {
     setError(message)
-    setTimeout(()=>setError(""), errorTime)
+    setTimeout(()=>setError(""), ErrorDisplayTime)
   }
   
   const fileInputRef = useRef(null)
@@ -32,6 +37,7 @@ function GEUploadForm() {
   const submitRef = useRef(null)
 
   const onSubmit = () => {
+    
     if(isLoading) {
       console.info('===== isLoading =====')
       return null
@@ -55,14 +61,20 @@ function GEUploadForm() {
 
     fetch(FileUploadURL, { method: "POST", body: input.files[0] }) 
     .then(async (data)=>{
-      const j = await data.json()
+      const j = await data.json() as any
       console.info('==== file uploaded ====', j)
       if(j.success !== true) {
         showError(j.error)
         return;
       }
-      window.localStorage.setItem("jData", JSON.stringify(j))
-      navigate("/viewer")
+
+      const db = getDatabase();
+      const dataRef = ref(db, 'jobs/' + j.jobId + '/status');
+      onValue(dataRef, (snapshot) => {
+        const data = snapshot.val();
+        console.info('==== data updated =====', data)
+      });
+      // navigate("/viewer")
     })
     .catch((err)=>{
       showError(err.message)

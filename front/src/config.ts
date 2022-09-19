@@ -29,6 +29,10 @@ export const FileUploadURL = process.env.FILE_UPLOAD_URL
 
 export const annotationsLink = "https://raw.githubusercontent.com/danilaplee/geometry-engine/main/annotations.json"
 
+export const CloudMessagingPublicKey = "BAofRljf2fxbiwixjHQT9ilC-l17YgcKO7lrGZr_D2PVnLRiR6d-F8AY9fmcLdc9Lp7IQ1DYoCQmKyejCfrwL3A"
+
 export const Errors = {
   nofile: "NO FILE SELECTED"
 }
+
+export const ErrorDisplayTime = 3000

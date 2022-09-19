@@ -7,14 +7,15 @@ import {
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase } from "firebase/database";
 
 import './App.css';
 
-import GELogin from './views/GELogin'
+import GELogin from './routes/login'
 
-import GEUploadForm from './views/GEUploadForm'
+import GEUploadForm from './routes/upload'
 
-import GEViewer from './views/GEViewer'
+import GEViewer from './routes/viewer'
 
 import { firebaseConfig } from './config'
 
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getDatabase(app);
 
 
 function App() {
