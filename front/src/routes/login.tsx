@@ -27,6 +27,10 @@ import GEInput from '../components/GEInput'
 
 import GEFormSection from '../components/GEFormSection'
 
+import GELoginContainer from '../components/GELoginContainer'
+
+import GELoginFormContainer from '../components/GELoginFormContainer'
+
 import logo from '../logo.svg';
 
 import { actionCodeSettings, ErrorDisplayTime } from '../config'
@@ -41,29 +45,6 @@ function GELogin() {
     setError(message)
     setTimeout(()=>setError(""), ErrorDisplayTime)
   }
-
-	const GELoginContainer = styled.div`
-    overflow: hidden;
-    max-width: 375px;
-    width: 100%;	    
-	`
-
-	const GELoginFormContainer = styled.div`
-		position: relative;
-    z-index: 1;
-    width: 100%;
-    min-height: 375px;
-    display: flex;
-    flex-direction: column;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    border-radius: 2px;
-    padding: 32px;
-    background-color: rgb(255, 255, 255);
-  `
-
   const emailInputRef = useRef(null)
 
 	const auth = getAuth();
@@ -89,8 +70,7 @@ function GELogin() {
 	    const errorMessage = error.message;
 	    const email = error.customData.email;
 	    const credential = GoogleAuthProvider.credentialFromError(error);
-      
-      navigate("/upload")
+	    showError(errorMessage)
 	  });
   }
 
@@ -141,6 +121,7 @@ function GELogin() {
 		    });
 		}
   }
+  
   useEffect(()=>{
   	checkAuthOnMount()
   }, [])
