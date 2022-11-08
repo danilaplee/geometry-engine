@@ -141,7 +141,7 @@ function GEUploadForm() {
             target="_blank"
             rel="noreferrer"
             >
-              annotations.json
+            <u>annotations.json</u>
           </a>)
         </GETitle>
 

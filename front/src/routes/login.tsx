@@ -4,7 +4,8 @@ import styled from 'styled-components'
 
 import {
 	useRef,
-	useEffect
+	useEffect,
+	useState
 } from 'react'
 
 import { 
@@ -28,10 +29,18 @@ import GEFormSection from '../components/GEFormSection'
 
 import logo from '../logo.svg';
 
-import { actionCodeSettings } from '../config'
+import { actionCodeSettings, ErrorDisplayTime } from '../config'
 
 function GELogin() {
   const navigate = useNavigate()
+
+  const [isLoading, setIsLoading] = useState(false) 
+  const [errorText, setError] = useState("")
+
+  const showError = (message:string) => {
+    setError(message)
+    setTimeout(()=>setError(""), ErrorDisplayTime)
+  }
 
 	const GELoginContainer = styled.div`
     overflow: hidden;
@@ -94,20 +103,20 @@ function GELogin() {
 	  console.info(email)
 
 	  if (!email) {
-	    
 	    email = window.prompt('Please provide your email for confirmation');
-	    return
-
 	  }
 		try {
-	  	
+	  	setIsLoading(true)
 	  	sendSignInLinkToEmail(auth, email, actionCodeSettings)
 		  .then(() => {
+		  	console.info('==== after succesfully send email =====')
 		    window.localStorage.setItem('emailForSignIn', email);
 		  })
 		  .catch((error:Error) => {
 		  	console.error("send confirmation link", error)
 		    const errorMessage = error.message;
+		    showError(errorMessage)
+		    setIsLoading(false)
 		  });
 
 		} catch(err) {
@@ -124,9 +133,11 @@ function GELogin() {
 		  signInWithEmailLink(auth, email as string, window.location.href)
 		    .then((result) => {
 		    	console.info('===== succesfully loggedin with email link ====', result)
+		      navigate("/upload")
 		    })
 		    .catch((error) => {
 		    	console.error("===== email link confirmation error ====", error)
+			    showError(error.message)
 		    });
 		}
   }
@@ -141,6 +152,11 @@ function GELogin() {
 				<GETitle>
 					Sign In
 				</GETitle>
+        {errorText !== "" ? (
+          <GETitle color="red">
+          ERROR: {errorText}
+          </GETitle>) 
+        : ""}
 
 				<GEFormSection>
 					<GEButton onClick={signInWithGoogle}>
@@ -156,9 +172,15 @@ function GELogin() {
 				</GEFormSection>
 
 				<GEFormSection>
-					<GEButton onClick={signInWithEmail}> 
-						Login With Email 
-					</GEButton>
+					{isLoading === false ? (
+						<GEButton onClick={signInWithEmail}> 
+							Login With Email 
+						</GEButton>
+					) : (
+						<GEButton> 
+							Check Your Email 
+						</GEButton>
+					)}
 				</GEFormSection>
 			
 			</GELoginFormContainer>
