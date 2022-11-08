@@ -1,5 +1,5 @@
 import { setCors } from './utils'
-import { processPolygonBatch } from './polygons'
+import { processPolygons } from './polygons'
 
 exports.processPolygonPayload = async (req, res) => {
   setCors(req,res)
@@ -12,7 +12,7 @@ exports.processPolygonPayload = async (req, res) => {
 
     if(data.payload) {
       const { polygons } = data.payload
-      const result = await processPolygonBatch(polygons)
+      const result = await processPolygons(polygons)
       console.info(result)
       return res.send(result)
     }
@@ -26,3 +26,5 @@ exports.processPolygonPayload = async (req, res) => {
 
   return res.send({ success: true })  
 }
+
+export * from './sqs'

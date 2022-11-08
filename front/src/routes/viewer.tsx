@@ -6,14 +6,14 @@ import GEInnerContainer from '../components/GEInnerContainer'
 import DataTable from 'react-data-table-component';
 
 const columns = [
-    {
-        name: 'Category Title',
-        selector: (row:any) => row.name,
-    },
-    {
-        name: 'Category Area',
-        selector: (row:any) => row.area,
-    },
+  {
+    name: 'Category Title',
+    selector: (row:any) => row.name,
+  },
+  {
+    name: 'Category Area',
+    selector: (row:any) => row.area,
+  },
 ];
 
 function GEViewer() {

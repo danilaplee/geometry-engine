@@ -3,6 +3,9 @@ import {
 	useRef, 
 	useState
 } from 'react'
+
+
+import { getDatabase, ref, get, onValue} from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
 import GETitle from '../components/GETitle'
 import GEMenu from '../components/GEMenu'
@@ -11,25 +14,57 @@ import GEButton from '../components/GEButton'
 import GEInnerContainer from '../components/GEInnerContainer'
 import GEFormSection from '../components/GEFormSection'
 
-const FileUploadURL = process.env.FILE_UPLOAD_URL 
-|| "https://europe-west2-geometry-lab.cloudfunctions.net/geometry-lab-dev-processPolygonPayload"
+import { 
+  FileUploadURL, 
+  annotationsLink, 
+  Errors, 
+  ErrorDisplayTime 
+} from '../config'
 
-const annotationsLink = "https://raw.githubusercontent.com/danilaplee/geometry-engine/main/annotations.json"
-
-const Errors = {
-  nofile:"NO FILE SELECTED"
+const findShortestPalyndrome = (st:string) => {
+    let checkPal = (ss:string)=> {
+      return ss.split("").reverse().join("") === ss
+    }
+    let nstr = st
+    let revIndex = st.length - 1
+    let firstIndex = 0
+    let iter = 0
+    while(!checkPal(nstr) && iter < 100) {
+      iter += 1
+      const first = st[firstIndex]
+      const last = st[revIndex]
+      if(first && last) {
+          if(first === last) {
+            revIndex -= 1
+            firstIndex += 1
+            continue
+          } else {
+            revIndex -= 1
+            continue
+          }
+      }
+      if(last) {
+        nstr += last
+        revIndex -= 1  
+      } 
+      else {
+        revIndex = st.length - 1
+        // firstIndex = 0
+      }
+    }
+    return nstr
 }
+
+
 function GEUploadForm() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false) 
 
   const [errorText, setError] = useState("")
 
-  const errorTime = 3000
-
   const showError = (message:string) => {
     setError(message)
-    setTimeout(()=>setError(""), errorTime)
+    setTimeout(()=>setError(""), ErrorDisplayTime)
   }
   
   const fileInputRef = useRef(null)
@@ -37,6 +72,7 @@ function GEUploadForm() {
   const submitRef = useRef(null)
 
   const onSubmit = () => {
+    
     if(isLoading) {
       console.info('===== isLoading =====')
       return null
@@ -60,10 +96,25 @@ function GEUploadForm() {
 
     fetch(FileUploadURL, { method: "POST", body: input.files[0] }) 
     .then(async (data)=>{
-      const j = await data.json()
+      const j = await data.json() as any
       console.info('==== file uploaded ====', j)
-      window.localStorage.setItem("jData", JSON.stringify(j))
-      navigate("/viewer")
+      if(j.success !== true) {
+        showError(j.error)
+        return;
+      }
+
+      const db = getDatabase();
+      const dataRef = ref(db, 'jobs/' + j.jobId + '/status');
+      onValue(dataRef, async (snapshot) => {
+        const data = snapshot.val();
+        console.info('==== data updated =====', data)
+        if(data === "done") {
+          const result = (await get(ref(db, 'jobs/' + j.jobId))).val();
+          console.info("async result", result);
+          window.localStorage.setItem("jData", JSON.stringify(result.result))
+          navigate("/viewer")
+        }
+      });
     })
     .catch((err)=>{
       showError(err.message)
