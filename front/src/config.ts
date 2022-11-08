@@ -10,18 +10,9 @@ export const firebaseConfig = {
 };
 
 export const actionCodeSettings = {
-  url: 'https://geometry-lab.ew.r.appspot.com/finishSignUp',
+  url: 'https://geometry-lab.ew.r.appspot.com/finishSignUp?userId=1234',
   // This must be true.
-  handleCodeInApp: true,
-  iOS: {
-    bundleId: 'geometry-lab.danilaplee.ios'
-  },
-  android: {
-    packageName: 'geometry-lab.danilaplee.android',
-    installApp: true,
-    minimumVersion: '12'
-  },
-  dynamicLinkDomain: 'geometry-lab.danilaplee.com'
+  handleCodeInApp: true
 };
 
 export const FileUploadURL = process.env.FILE_UPLOAD_URL 
