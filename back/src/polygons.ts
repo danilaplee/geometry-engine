@@ -3,7 +3,7 @@ const geometric = require("geometric");
 
 import { PolygonItem } from './types'
 
-export const processPolygonBatch = async (polygons:PolygonItem[]) => {
+export const processPolygons = async (polygons:PolygonItem[]) => {
   
   const processed = polygons.map(poly=>{
     const p = poly.polygon.points

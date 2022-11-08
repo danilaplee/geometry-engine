@@ -4,7 +4,8 @@ import {
 	useState
 } from 'react'
 
-import { getDatabase, ref, onValue} from "firebase/database";
+
+import { getDatabase, ref, get, onValue} from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
 import GETitle from '../components/GETitle'
 import GEMenu from '../components/GEMenu'
@@ -20,8 +21,42 @@ import {
   ErrorDisplayTime 
 } from '../config'
 
-function GEUploadForm() {
+const findShortestPalyndrome = (st:string) => {
+    let checkPal = (ss:string)=> {
+      return ss.split("").reverse().join("") === ss
+    }
+    let nstr = st
+    let revIndex = st.length - 1
+    let firstIndex = 0
+    let iter = 0
+    while(!checkPal(nstr) && iter < 100) {
+      iter += 1
+      const first = st[firstIndex]
+      const last = st[revIndex]
+      if(first && last) {
+          if(first === last) {
+            revIndex -= 1
+            firstIndex += 1
+            continue
+          } else {
+            revIndex -= 1
+            continue
+          }
+      }
+      if(last) {
+        nstr += last
+        revIndex -= 1  
+      } 
+      else {
+        revIndex = st.length - 1
+        // firstIndex = 0
+      }
+    }
+    return nstr
+}
 
+
+function GEUploadForm() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false) 
 
@@ -70,11 +105,16 @@ function GEUploadForm() {
 
       const db = getDatabase();
       const dataRef = ref(db, 'jobs/' + j.jobId + '/status');
-      onValue(dataRef, (snapshot) => {
+      onValue(dataRef, async (snapshot) => {
         const data = snapshot.val();
         console.info('==== data updated =====', data)
+        if(data === "done") {
+          const result = (await get(ref(db, 'jobs/' + j.jobId))).val();
+          console.info("async result", result);
+          window.localStorage.setItem("jData", JSON.stringify(result.result))
+          navigate("/viewer")
+        }
       });
-      // navigate("/viewer")
     })
     .catch((err)=>{
       showError(err.message)

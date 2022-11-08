@@ -1,5 +1,5 @@
 import { setCors, getDB } from './utils'
-import { processPolygonBatch } from './polygons'
+import { processPolygons } from './polygons'
 import { v4 as uuid } from 'uuid'
 const { PubSub } = require('@google-cloud/pubsub');
 import { ref, set } from "firebase/database";
@@ -75,11 +75,12 @@ exports.processPolygonBatch = async (event, ctx, callback) => {
     )
     const { payload, id } = data
     const { polygons } = payload
-    const result = processPolygonBatch(polygons)
+    const result = await (await processPolygons(polygons))
 
     console.info('processPolygonBatch result', result)
     const db = getDB()
     await set(ref(db, 'jobs/' + id), {
+      result,
       status: "done"
     })
 

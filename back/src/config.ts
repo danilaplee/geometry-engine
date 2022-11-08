@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyBzcwX3ybLkNpbfe2Ss-1Mo_8JsV3dVbrk",
+  apiKey: process.env.FIREBASE_API_KEY || "AIzaSyBzcwX3ybLkNpbfe2Ss-1Mo_8JsV3dVbrk",
   authDomain: "geometry-lab.firebaseapp.com",
   databaseURL: "https://geometry-lab-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "geometry-lab",
